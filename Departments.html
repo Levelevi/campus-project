@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Departments — D.A.V. College Hoshiarpur</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Dept tab nav */
+    .dept-tabs {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+      border-bottom: 2px solid var(--light-gray);
+      padding-bottom: 0;
+    }
+    .dept-tab {
+      padding: 0.6rem 1.2rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--mid-gray);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: var(--transition);
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      font-family: var(--font-body);
+    }
+    .dept-tab:hover { color: var(--navy); }
+    .dept-tab.active { color: var(--navy); border-bottom-color: var(--gold); }
+
+    .dept-panel { display: none; }
+    .dept-panel.active { display: block; }
+
+    /* Dept header card */
+    .dept-header-card {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+      border-radius: var(--radius-lg);
+      padding: 2rem 2.5rem;
+      color: var(--white);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .dept-header-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(200,145,42,0.2);
+      border: 2px solid var(--gold);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+    .dept-header-card h2 { color: var(--white); margin: 0 0 0.3rem; font-size: 1.6rem; }
+    .dept-header-card p { color: rgba(255,255,255,0.72); margin: 0; font-size: 0.95rem; }
+
+    /* Sub-dept section */
+    .sub-dept {
+      margin-bottom: 2.5rem;
+    }
+    .sub-dept-title {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 2px solid var(--light-gray);
+    }
+    .sub-dept-title h3 { margin: 0; font-size: 1.2rem; }
+    .sub-dept-title .pill { flex-shrink: 0; }
+
+    /* Course pills row */
+    .course-pills {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <div>📍 Chandigarh Road, Hoshiarpur, Punjab 146001</div>
+      <div class="top-bar-contact">
+        <a href="tel:+911882242525">📞 01882-242525</a>
+        <a href="mailto:davchsp@gmail.com">✉ davchsp@gmail.com</a>
+        <a href="https://www.davchsp.org.in" target="_blank">🌐 davchsp.org.in</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-brand">
+        <div class="nav-brand-logo">DAV</div>
+        <div class="nav-brand-text">
+          <div class="college-name">D.A.V. College Hoshiarpur</div>
+          <div class="college-sub">Est. 1926 · NAAC Grade 'A'</div>
+        </div>
+      </a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="departments.html">Departments</a></li>
+        <li><a href="courses.html">Courses</a></li>
+        <li><a href="services.html">Student Services</a></li>
+        <li><a href="alumni.html">Alumni</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container page-hero-inner">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        <span>›</span>
+        <span>Departments</span>
+      </div>
+      <h1>Academic Departments</h1>
+      <p>Explore our diverse faculties — expert faculty, rich curriculum, and modern facilities across every discipline.</p>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <section class="section">
+    <div class="container">
+
+      <!-- TAB NAV -->
+      <div class="dept-tabs">
+        <button class="dept-tab active" data-tab="commerce">📊 Commerce &amp; Business</button>
+        <button class="dept-tab" data-tab="computer">💻 Computer Science</button>
+        <button class="dept-tab" data-tab="arts">🎨 Arts &amp; Humanities</button>
+        <button class="dept-tab" data-tab="languages">📖 Languages</button>
+        <button class="dept-tab" data-tab="social">🌍 Social Sciences</button>
+      </div>
+
+      <!-- ======================== -->
+      <!-- TAB: COMMERCE & BUSINESS -->
+      <!-- ======================== -->
+      <div class="dept-panel active" id="tab-commerce">
+
+        <div class="dept-header-card">
+          <div class="dept-header-icon">📊</div>
+          <div>
+            <h2>Commerce &amp; Business Management</h2>
+            <p>Quality education with ethical values, empowering students for commerce and industry since the college's founding.</p>
+          </div>
+        </div>
+
+        <div class="grid-2" style="gap:2rem; margin-bottom:2rem; align-items:start;">
+          <div>
+            <h4 class="mb-2 text-navy">Courses Offered</h4>
+            <div class="course-pills">
+              <span class="pill pill-navy">B.Com.</span>
+              <span class="pill pill-navy">B.Com. (Hons.)</span>
+              <span class="pill pill-navy">B.B.A.</span>
+              <span class="pill pill-gold">M.Com.</span>
+            </div>
+            <div class="highlight-box mt-2">
+              <p style="margin:0; font-size:0.9rem;">
+                <strong>Mission:</strong> Quality education for all irrespective of caste, creed and
+                socio-economic status. Overall development with strong ethical values.
+              </p>
+            </div>
+          </div>
+          <div class="img-placeholder" style="height:180px; border-radius:var(--radius-lg);">
+            <span class="ph-icon">🏢</span>
+            <span>Commerce Department Photo</span>
+          </div>
+        </div>
+
+        <h4 class="mb-2 text-navy">Department Faculty</h4>
+        <div class="table-wrap">
+          <table class="styled-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Faculty Name</th>
+                <th>Qualifications</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td><strong>Mr. Jugal Kishore</strong></td>
+                <td>M.Com. (Gold Medalist), M.Phil.</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td><strong>Ms. Raj Kumari</strong></td>
+                <td>M.Com., UGC-NET</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td><strong>Ms. Kuldeep Kaur</strong></td>
+                <td>M.Com., B.Ed, UGC-NET, JRF</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td><strong>Lt. C.S., Dr. Aman Bahri</strong></td>
+                <td>M.Com., Ph.D, M.S.(Banking), C.S.(Exec.), UGC-NET</td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td><strong>Ms. Monika Lakhanpal</strong></td>
+                <td>M.Com., M.Phil., CA(Inter), UGC-NET</td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td><strong>Mrs. Geetu Agnihotri</strong></td>
+                <td>M.Com., B.Ed, M.Phil., Ph.D, UGC-NET</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- ======================== -->
+      <!-- TAB: COMPUTER SCIENCE    -->
+      <!-- ======================== -->
+      <div class="dept-panel" id="tab-computer">
+
+        <div class="dept-header-card">
+          <div class="dept-header-icon">💻</div>
+          <div>
+            <h2>Computer Science</h2>
+            <p>Ultra-modern Media &amp; IT Block with 4 AC labs, multimedia room, and high-speed connectivity. Alumni placed at Infosys, IBM, and Mahindra Finance.</p>
+          </div>
+        </div>
+
+        <div class="grid-2" style="gap:2rem; margin-bottom:2rem; align-items:start;">
+          <div>
+            <h4 class="mb-2 text-navy">Courses Offered</h4>
+            <div class="course-pills">
+              <span class="pill pill-navy">B.C.A.</span>
+              <span class="pill pill-navy">B.Sc. (Computer Application)</span>
+              <span class="pill pill-navy">B.Sc. (Data Analytics)</span>
+              <span class="pill pill-gold">P.G.D.C.A.</span>
+              <span class="pill pill-gold">M.Sc. (IT)</span>
+            </div>
+            <div class="highlight-box mt-2">
+              <p style="margin:0; font-size:0.9rem;">
+                <strong>Infrastructure:</strong> 4 fully air-conditioned computer labs, dedicated multimedia room,
+                high-speed internet. Alumni successfully placed at <strong>Infosys, IBM,</strong> and <strong>Mahindra Finance.</strong>
+              </p>
+            </div>
+          </div>
+          <div class="img-placeholder" style="height:180px; border-radius:var(--radius-lg);">
+            <span class="ph-icon">🖥️</span>
+            <span>Computer Lab Photo</span>
+          </div>
+        </div>
+
+        <h4 class="mb-2 text-navy">Department Faculty</h4>
+        <div class="table-wrap">
+          <table class="styled-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Faculty Name</th>
+                <th>Qualifications</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td><strong>Mr. Sushil Kumar</strong></td>
+                <td>M.C.A., M.Tech (I.T.)</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td><strong>Dr. Pardeep Kaur</strong></td>
+                <td>M.Sc., M.Phil., Ph.D.</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td><strong>Ms. Sonam Bhatia</strong></td>
+                <td>B.Tech (I.T.), M.Tech (CS), UGC-NET</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td><strong>Mr. Jaswinder Singh</strong></td>
+                <td>M.C.A., Ph.D., UGC-NET</td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td><strong>Ms. Anjali Jolly</strong></td>
+                <td>B.E (CSE), M.Sc (IT), UGC-NET</td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td><strong>Ms. Arti Sharma</strong></td>
+                <td>M.Sc., M.C.A., M.A (ECO), B.Ed</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- ======================== -->
+      <!-- TAB: ARTS & HUMANITIES   -->
+      <!-- ======================== -->
+      <div class="dept-panel" id="tab-arts">
+
+        <div class="dept-header-card">
+          <div class="dept-header-icon">🎨</div>
+          <div>
+            <h2>Arts &amp; Humanities</h2>
+            <p>A vibrant faculty covering Home Science, Physical Education, Music, and Fine Arts — nurturing creativity, culture, and well-being.</p>
+          </div>
+        </div>
+
+        <!-- Home Science -->
+        <div class="sub-dept">
+          <div class="sub-dept-title">
+            <h3>🏠 Home Science</h3>
+            <span class="pill pill-navy">B.A. Level</span>
+          </div>
+          <div class="grid-2" style="gap:2rem; align-items:start; margin-bottom:1.5rem;">
+            <div>
+              <p>
+                Training at B.A. level with practical work in a well-equipped laboratory. The department
+                regularly organises Mehndi, Rangoli, Knitting, Cooking, and Embroidery competitions.
+                An end-of-session exhibition-cum-sale of student handicrafts is a highlight of the academic year.
+              </p>
+              <div class="highlight-box">
+                <p style="margin:0; font-size:0.9rem;">
+                  Students gain hands-on experience that bridges academic learning with practical life skills
+                  and creative expression.
+                </p>
+              </div>
+            </div>
+            <div class="img-placeholder" style="height:160px; border-radius:var(--radius-lg);">
+              <span class="ph-icon">🧵</span>
+              <span>Home Science Lab / Activity Photo</span>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="styled-table">
+              <thead><tr><th>Faculty Name</th><th>Designation</th><th>Qualifications</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Dr. Kusum Lata</strong></td>
+                  <td>Incharge</td>
+                  <td>M.A, B.Ed, Ph.D, UGC-NET</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Physical Education -->
+        <div class="sub-dept">
+          <div class="sub-dept-title">
+            <h3>🏅 Physical Education</h3>
+            <span class="pill pill-gold">BPES Program</span>
+          </div>
+          <div class="grid-2" style="gap:2rem; align-items:start; margin-bottom:1.5rem;">
+            <div>
+              <p>
+                The department offers outstanding sports facilities including football, hockey, cricket,
+                kabaddi, boxing, basketball, volleyball, badminton, table-tennis, and kho-kho.
+                The lush green playgrounds and well-maintained athletics track provide an excellent
+                environment for sporting excellence.
+              </p>
+              <p><strong>Annual Events:</strong></p>
+              <ul class="info-list">
+                <li>Principal Rala Ram Memorial Athletic Meet</li>
+                <li>Prof. Piara Singh Memorial Staff Badminton Tournament</li>
+              </ul>
+            </div>
+            <div class="img-placeholder" style="height:160px; border-radius:var(--radius-lg);">
+              <span class="ph-icon">🏃</span>
+              <span>Sports / Playground Photo</span>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="styled-table">
+              <thead><tr><th>Faculty Name</th><th>Qualifications</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Dr. Rahul Kalia</strong></td>
+                  <td>M.Phil., Ph.D., SLET, UGC-NET</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Music -->
+        <div class="sub-dept">
+          <div class="sub-dept-title">
+            <h3>🎵 Music</h3>
+            <span class="pill pill-navy">Vocal &amp; Instrumental</span>
+          </div>
+          <div class="grid-2" style="gap:2rem; align-items:start; margin-bottom:1.5rem;">
+            <div>
+              <p>
+                Music training is offered at graduation level in both Vocal and Instrumental streams.
+                The Society for Promotion of Music regularly arranges sessions with renowned artists,
+                exposing students to classical and contemporary musical traditions.
+              </p>
+              <p>
+                Students regularly participate in Youth Festivals and inter-college music competitions,
+                bringing recognition to the college.
+              </p>
+            </div>
+            <div class="img-placeholder" style="height:160px; border-radius:var(--radius-lg);">
+              <span class="ph-icon">🎶</span>
+              <span>Music Department / Performance Photo</span>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="styled-table">
+              <thead><tr><th>Faculty Name</th><th>Qualifications</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Dr. Seema Chadha</strong></td><td>Music Faculty</td></tr>
+                <tr><td><strong>Dr. Satvinder Kaur</strong></td><td>Music Faculty</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Fine Arts -->
+        <div class="sub-dept">
+          <div class="sub-dept-title">
+            <h3>🖼️ Fine Arts</h3>
+            <span class="pill pill-navy">B.A. Elective</span>
+          </div>
+          <div class="grid-2" style="gap:2rem; align-items:start; margin-bottom:1.5rem;">
+            <div>
+              <p>
+                Fine Arts is offered as an elective subject at B.A. level. The department conducts
+                dedicated sessions for Still Life, Landscape, Portrait Making, Collage, Poster, and
+                Clay Making. Students actively participate in Youth Festivals and inter-college
+                art competitions.
+              </p>
+            </div>
+            <div class="img-placeholder" style="height:160px; border-radius:var(--radius-lg);">
+              <span class="ph-icon">🎨</span>
+              <span>Fine Arts Studio Photo</span>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="styled-table">
+              <thead><tr><th>Faculty Name</th><th>Designation</th><th>Qualifications</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Ms. Bulbul Sharma</strong></td>
+                  <td>Incharge</td>
+                  <td>M.A., M.Phil., UGC-NET</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ======================== -->
+      <!-- TAB: LANGUAGES           -->
+      <!-- ======================== -->
+      <div class="dept-panel" id="tab-languages">
+
+        <div class="dept-header-card">
+          <div class="dept-header-icon">📖</div>
+          <div>
+            <h2>Languages</h2>
+            <p>Comprehensive language education in English, Hindi, Punjabi, and Sanskrit — shaping communication, literature, and cultural understanding.</p>
+          </div>
+        </div>
+
+        <!-- English -->
+        <div class="sub-dept">
+          <div class="sub-dept-title">
+            <h3>🇬🇧 English</h3>
+            <span class="pill pill-navy">Elective + Compulsory</span>
+          </div>
+          <p>
+            English is offered as both an elective and compulsory course at graduation level.
+            The department shares a Language Lab with Hindi and Punjabi. An
+            <strong>Add-on Course in Communicative English</strong> has been running since 2017.
+            The <strong>Tagore Literary Society</strong> organises debates, quiz competitions,
+            paper readings, and movie screenings to foster language skills.
+          </p>
+          <div class="table-wrap mt-2">
+            <table class="styled-table">
+              <thead><tr><th>Faculty Name</th><th>Qualifications</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Dr. Rupakshi Bagga</strong></td><td>English Faculty</td></tr>
+                <tr><td><strong>Ms. Tracy Kohli</strong></td><td>English Faculty</td></tr>
+                <tr><td><strong>Dr. Pankaj Sharma</strong></td><td>English Faculty</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Hindi -->
+        <div class="sub-dept">
+          <div class="sub-dept-title">
+            <h3>🇮🇳 Hindi</h3>
+            <span class="pill pill-navy">Graduation Level</span>
+          </div>
+          <p>
+            Hindi is offered at graduation level, improving communication skills and building
+            student interest in classical and modern Hindi literature. The
+            <strong>Hindi Sahitya Sabha</strong> organises extension lectures, declamation
+            contests, paper reading sessions, and Hindi Diwas celebrations.
+          </p>
+          <div class="table-wrap mt-2">
+            <table class="styled-table">
+              <thead><tr><th>Faculty Name</th><th>Qualifications</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Dr. Neeru Mehta</strong></td>
+                  <td>M.A. (English &amp; Hindi Gold Medalist), Ph.D.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Punjabi -->
+        <div class="sub-dept">
+          <div class="sub-dept-title">
+            <h3>🌾 Punjabi</h3>
+            <span class="pill pill-gold">Post-Graduate</span>
+          </div>
+          <p>
+            Punjabi is offered as compulsory and elective at graduation level, along with a
+            Post Graduate course (M.A. Punjabi). The <strong>Punjabi Sahit Sabha</strong> organises
+            debates, paper reading, and creative writing sessions to celebrate and promote
+            Punjabi language and literature.
+          </p>
+          <div class="table-wrap mt-2">
+            <table class="styled-table">
+              <thead><tr><th>Faculty Name</th><th>Qualifications</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Ms. Sharanjit Kaur</strong></td><td>Punjabi Faculty</td></tr>
+                <tr><td><strong>Dr. Kulwant Singh Rana</strong></td><td>Punjabi Faculty</td></tr>
+                <tr><td><strong>Mr. Amarjit Singh</strong></td><td>Punjabi Faculty</td></tr>
+                <tr><td><strong>Dr. Inderjit Singh</strong></td><td>Punjabi Faculty</td></tr>
+                <tr><td><strong>Dr. Surjit Kaur</strong></td><td>Punjabi Faculty</td></tr>
+                <tr><td><strong>Dr. Mukhtar Singh</strong></td><td>Punjabi Faculty</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Sanskrit -->
+        <div class="sub-dept">
+          <div class="sub-dept-title">
+            <h3>🕉️ Sanskrit</h3>
+            <span class="pill pill-navy">B.A. Elective</span>
+          </div>
+          <p>
+            Sanskrit is offered as an elective subject at graduation level. Students have the
+            unique opportunity to visit the <strong>Indological Center at VVRI Sadhu Ashram,
+            Hoshiarpur</strong> — one of the premier Sanskrit research institutes in India —
+            enriching their study of ancient Indian knowledge systems.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- ======================== -->
+      <!-- TAB: SOCIAL SCIENCES     -->
+      <!-- ======================== -->
+      <div class="dept-panel" id="tab-social">
+
+        <div class="dept-header-card">
+          <div class="dept-header-icon">🌍</div>
+          <div>
+            <h2>Social Sciences</h2>
+            <p>Building rational, informed citizens through History, Political Science, Economics, and Sociology at both UG and PG levels.</p>
+          </div>
+        </div>
+
+        <!-- History -->
+        <div class="sub-dept">
+          <div class="sub-dept-title">
+            <h3>📜 History</h3>
+            <span class="pill pill-gold">Post-Graduate</span>
+            <span class="pill pill-navy">B.A. Elective</span>
+          </div>
+          <p>
+            History is offered as an elective at B.A. level. M.A. History was introduced in
+            2014–15, making it a full post-graduate discipline. The department draws on India's
+            rich cultural heritage and prepares students for competitive examinations,
+            civil services, and academic careers.
+          </p>
+          <div class="table-wrap mt-2">
+            <table class="styled-table">
+              <thead><tr><th>Faculty Name</th><th>Qualifications</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Ms. Neelam Kalsi</strong></td><td>History Faculty</td></tr>
+                <tr><td><strong>Mr. Anil Kumar</strong></td><td>History Faculty</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Political Science -->
+        <div class="sub-dept">
+          <div class="sub-dept-title">
+            <h3>🏛️ Political Science</h3>
+            <span class="pill pill-gold">Post-Graduate</span>
+            <span class="pill pill-navy">B.A. Elective</span>
+          </div>
+          <p>
+            Both UG and PG courses are offered in Political Science. The department regularly
+            organises seminars and extension lectures by renowned scholars, exposing students
+            to current political thought and public policy discourse.
+          </p>
+          <div class="table-wrap mt-2">
+            <table class="styled-table">
+              <thead><tr><th>Faculty Name</th><th>Qualifications</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Mr. Sanjeev Ghai</strong></td><td>Political Science Faculty</td></tr>
+                <tr><td><strong>Dr. Kusum Lata</strong></td><td>Political Science Faculty</td></tr>
+                <tr><td><strong>Ms. Bulbul Sharma</strong></td><td>Political Science Faculty</td></tr>
+                <tr><td><strong>Dr. Rajni Bala</strong></td><td>Political Science Faculty</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Economics -->
+        <div class="sub-dept">
+          <div class="sub-dept-title">
+            <h3>📈 Economics</h3>
+            <span class="pill pill-navy">Graduation Level</span>
+          </div>
+          <p>
+            Economics is offered at graduation level with a focus on rational and analytical
+            thinking. The department builds awareness of economic issues at the national and
+            global level, preparing students for careers in finance, policy, and research.
+          </p>
+          <div class="table-wrap mt-2">
+            <table class="styled-table">
+              <thead><tr><th>Faculty Name</th><th>Qualifications</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Dr. Versha Mohindra</strong></td><td>Economics Faculty</td></tr>
+                <tr><td><strong>Mr. Kapil Chopra</strong></td><td>Economics Faculty</td></tr>
+                <tr><td><strong>Dr. Sapna Sharma</strong></td><td>Economics Faculty</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Sociology -->
+        <div class="sub-dept">
+          <div class="sub-dept-title">
+            <h3>🤝 Sociology</h3>
+            <span class="pill pill-navy">Graduation Level</span>
+          </div>
+          <p>
+            Sociology is offered at graduation level, building social awareness about national
+            and global happenings and helping students understand the structures, changes, and
+            challenges of modern society.
+          </p>
+          <div class="table-wrap mt-2">
+            <table class="styled-table">
+              <thead><tr><th>Faculty Name</th><th>Qualifications</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Ms. Reena</strong></td>
+                  <td>M.A., UGC-NET</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+      <!-- END TAB PANELS -->
+
+      <!-- CTA -->
+      <div style="background:var(--off-white); border-radius:var(--radius-lg); padding:2rem; text-align:center; margin-top:3rem; border:1px solid var(--light-gray);">
+        <h3 class="mb-2">Interested in joining a department?</h3>
+        <p style="color:var(--mid-gray); margin-bottom:1.5rem;">Check the full list of courses offered or get in touch with us directly.</p>
+        <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+          <a href="courses.html" class="btn btn-primary">View All Courses</a>
+          <a href="contact.html" class="btn btn-outline-navy">Contact Us</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div style="display:flex; align-items:center; gap:0.8rem; margin-bottom:1rem;">
+            <div class="nav-brand-logo" style="width:42px;height:42px;font-size:1rem;">DAV</div>
+            <div>
+              <div style="color:var(--white); font-weight:700; font-family:var(--font-head); font-size:1rem;">D.A.V. College</div>
+              <div style="color:var(--gold-light); font-size:0.72rem;">Hoshiarpur · Est. 1926</div>
+            </div>
+          </div>
+          <p>A premier multi-faculty Post Graduate institution of Northern India, affiliated to Panjab University, Chandigarh and accredited with NAAC Grade 'A'.</p>
+        </div>
+        <div class="footer-col">
+          <h5>Quick Links</h5>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About the College</a></li>
+            <li><a href="departments.html">Departments</a></li>
+            <li><a href="courses.html">Courses Offered</a></li>
+            <li><a href="services.html">Student Services</a></li>
+            <li><a href="alumni.html">Alumni &amp; Scholarships</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Departments</h5>
+          <ul class="footer-links">
+            <li><a href="departments.html">Commerce &amp; Business</a></li>
+            <li><a href="departments.html">Computer Science</a></li>
+            <li><a href="departments.html">Arts &amp; Humanities</a></li>
+            <li><a href="departments.html">Languages</a></li>
+            <li><a href="departments.html">Social Sciences</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Contact Us</h5>
+          <div class="footer-contact-item">
+            <span class="footer-contact-icon">📍</span>
+            <span>Chandigarh Road, Hoshiarpur, Punjab 146001</span>
+          </div>
+          <div class="footer-contact-item">
+            <span class="footer-contact-icon">📞</span>
+            <span>+91 01882-242525</span>
+          </div>
+          <div class="footer-contact-item">
+            <span class="footer-contact-icon">✉</span>
+            <a href="mailto:davchsp@gmail.com" style="color:var(--gold-light);">davchsp@gmail.com</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 D.A.V. College Hoshiarpur. All rights reserved.</span>
+        <span>Affiliated to <a href="#">Panjab University, Chandigarh</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <button id="scroll-top" title="Back to top">↑</button>
+
+  <script src="nav.js"></script>
+  <script>
+    // Department tab switching
+    const tabs = document.querySelectorAll('.dept-tab');
+    const panels = document.querySelectorAll('.dept-panel');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.tab;
+
+        tabs.forEach(t => t.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+
+        tab.classList.add('active');
+        document.getElementById('tab-' + target).classList.add('active');
+
+        // Scroll to tabs on mobile
+        document.querySelector('.dept-tabs').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    });
+  </script>
+</body>
+</html>
