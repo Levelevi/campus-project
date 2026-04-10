@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notices — DAV College Staff Portal</title>
+  <link rel="stylesheet" href="../portal.css" />
+  <style>
+    .notice-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      margin-bottom: 1rem;
+      overflow: hidden;
+      transition: var(--trans);
+    }
+    .notice-card:hover { box-shadow: var(--shadow-md); }
+    .notice-card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 1.1rem 1.4rem 0.7rem;
+      gap: 1rem;
+    }
+    .notice-card-title {
+      font-family: var(--font-head);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+    .notice-card-body {
+      padding: 0 1.4rem 1.2rem;
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .del-btn {
+      flex-shrink: 0;
+      padding: 5px 12px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      background: var(--white);
+      color: var(--danger);
+      cursor: pointer;
+      transition: var(--trans);
+    }
+    .del-btn:hover { background: var(--danger-bg); border-color: var(--danger); }
+    .cat-badge-exam    { background: var(--danger-bg);  color: var(--danger);  }
+    .cat-badge-event   { background: var(--gold-pale);   color: var(--gold);    }
+    .cat-badge-holiday { background: var(--warn-bg);    color: var(--warn);    }
+    .cat-badge-general { background: rgba(13,33,71,0.07); color: var(--navy);  }
+  </style>
+</head>
+<body>
+
+<button class="sidebar-toggle" id="sidebarToggle">
+  <span></span><span></span><span></span>
+</button>
+
+<div class="portal-wrap">
+
+  <!-- ═══════ SIDEBAR ═══════ -->
+  <aside class="p-sidebar" id="sidebar">
+    <div class="ps-brand">
+      <div class="ps-brand-logo">DAV</div>
+      <div>
+        <div class="ps-brand-name">D.A.V. College</div>
+        <div class="ps-brand-sub">Staff Portal · Est. 1926</div>
+      </div>
+    </div>
+    <div class="ps-user">
+      <div class="ps-avatar">PK</div>
+      <div class="ps-user-name">Dr. Priya Sharma</div>
+      <div class="ps-user-sub">Emp ID: teacher123</div>
+      <span class="ps-user-badge">Computer Science</span>
+    </div>
+    <nav class="ps-nav">
+      <a href="dashboard.html" class="ps-link"><span class="ps-icon">🏠</span> Dashboard</a>
+      <a href="notices.html"   class="ps-link active"><span class="ps-icon">📢</span> Notices</a>
+      <a href="queries.html"   class="ps-link"><span class="ps-icon">💬</span> Student Queries</a>
+    </nav>
+    <div class="ps-logout">
+      <button class="ps-logout-btn" onclick="teacherLogout()"><span>🚪</span> Logout</button>
+    </div>
+  </aside>
+
+  <!-- ═══════ MAIN ═══════ -->
+  <main class="p-main">
+
+    <div class="p-topbar">
+      <div class="p-topbar-left">
+        <h1>Notices</h1>
+        <p>Post announcements for your students</p>
+      </div>
+      <div class="p-topbar-right">
+        <span class="topbar-badge" id="notice-count-badge">5 Posted</span>
+      </div>
+    </div>
+
+    <div class="p-content">
+
+      <div class="grid-2" style="align-items: start;">
+
+        <!-- POST FORM -->
+        <div class="card" style="position:sticky;top:80px;">
+          <div class="card-header">
+            <span class="card-title">✍️ Post New Notice</span>
+          </div>
+          <div class="card-body">
+
+            <div id="notice-success" style="display:none;" class="alert alert-success">
+              ✅ Notice posted! All students can see it now.
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Notice Title</label>
+              <input type="text" id="notice-title" class="form-input"
+                placeholder="e.g. Internal Assessment on 5th December" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Category</label>
+              <select id="notice-cat" class="form-select">
+                <option value="">— Select Category —</option>
+                <option value="Exam">Exam</option>
+                <option value="Event">Event</option>
+                <option value="Holiday">Holiday</option>
+                <option value="General">General</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Notice Details</label>
+              <textarea id="notice-body" class="form-textarea"
+                placeholder="Write the full notice here. Include dates, venues, and deadlines…"
+                style="min-height:140px;"></textarea>
+              <span class="form-hint">Be clear and include all relevant action items.</span>
+            </div>
+
+            <button class="btn btn-primary btn-full" onclick="postNotice()">
+              📢 &nbsp; Post Notice
+            </button>
+          </div>
+        </div>
+
+        <!-- NOTICES LIST -->
+        <div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+            <h3 style="font-family:var(--font-head);font-size:1rem;color:var(--navy);">All Notices</h3>
+            <div class="filter-row">
+              <button class="filter-btn active" onclick="filterNotices('all', this)">All</button>
+              <button class="filter-btn" onclick="filterNotices('Exam', this)">Exam</button>
+              <button class="filter-btn" onclick="filterNotices('Event', this)">Event</button>
+              <button class="filter-btn" onclick="filterNotices('General', this)">General</button>
+            </div>
+          </div>
+
+          <div id="notices-list">
+            <!-- seeded by JS -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="../portal.js"></script>
+<script>
+  requireTeacherLogin();
+
+  const CAT_CLASSES = {
+    'Exam':    'cat-badge-exam',
+    'Event':   'cat-badge-event',
+    'Holiday': 'cat-badge-holiday',
+    'General': 'cat-badge-general',
+  };
+
+  // Seed default notices into localStorage if not there
+  const NOTICES_KEY = 'dav_notices';
+  function seedNotices() {
+    if (localStorage.getItem(NOTICES_KEY)) return;
+    const defaults = [
+      { id: 'n1', cat: 'Exam',    date: '22 Nov 2024', title: 'Exam Form Submission — Last Date: 30th November', body: 'All B.Sc. CS Semester V students must submit their exam forms before 30th November 2024. Late submissions will not be accepted. Visit the Examination Cell (Room A-12) between 10 AM – 3 PM on working days. Carry your college ID and fee receipt.' },
+      { id: 'n2', cat: 'Event',   date: '15 Nov 2024', title: 'Annual Fest "Utsav 2025" — Registrations Now Open', body: 'DAV College Annual Cultural Fest "Utsav 2025" will be held on 10th–11th December. Events include solo singing, group dance, coding competition, and debate. Register at the Student Council office (Room B-04) by 5th December. Participation certificates will be provided to all.' },
+      { id: 'n3', cat: 'Holiday', date: '10 Nov 2024', title: 'Library Closed — 25th November (Gurpurab)', body: 'The college library will remain closed on 25th November 2024 on account of Gurpurab. All due books must be returned by 23rd November to avoid late fees. Library will resume normal hours on 26th November.' },
+      { id: 'n4', cat: 'General', date: '5 Nov 2024',  title: 'Internal Assessment Schedule — November 2024', body: 'The Internal Assessment schedule for November has been uploaded. B.Sc. CS Semester V assessments are scheduled for 5th December (DS & DBMS) and 7th December (Web Tech, Math & OS). Syllabus covered up to Unit 3 will be included.' },
+      { id: 'n5', cat: 'Exam',    date: '1 Nov 2024',  title: 'End Semester Examinations Begin — 15th December 2024', body: 'End Semester Examinations for B.Sc. CS Semester V will commence from 15th December 2024. Students must maintain minimum 75% attendance to be eligible. The detailed date sheet will be shared once confirmed by Panjab University, Chandigarh.' },
+    ];
+    localStorage.setItem(NOTICES_KEY, JSON.stringify(defaults));
+  }
+
+  function getAllNotices() {
+    try { return JSON.parse(localStorage.getItem(NOTICES_KEY)) || []; }
+    catch { return []; }
+  }
+  function saveNotices(n) { localStorage.setItem(NOTICES_KEY, JSON.stringify(n)); }
+
+  function renderNotices(filter) {
+    const listEl = document.getElementById('notices-list');
+    listEl.querySelectorAll('.notice-card').forEach(c => c.remove());
+
+    const notices = getAllNotices();
+    const filtered = filter && filter !== 'all' ? notices.filter(n => n.cat === filter) : notices;
+
+    filtered.forEach(n => {
+      const card = document.createElement('div');
+      card.className = 'notice-card';
+      card.dataset.id  = n.id;
+      card.dataset.cat = n.cat;
+      const catCls = CAT_CLASSES[n.cat] || 'cat-badge-general';
+      card.innerHTML = `
+        <div class="notice-card-head">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              <span class="badge ${catCls}">${escapeHtml(n.cat)}</span>
+              <span style="font-size:0.68rem;color:var(--muted);">${escapeHtml(n.date)}</span>
+            </div>
+            <div class="notice-card-title">${escapeHtml(n.title)}</div>
+          </div>
+          <button class="del-btn" onclick="deleteNotice(this)">🗑 Delete</button>
+        </div>
+        <div class="notice-card-body">${escapeHtml(n.body)}</div>
+      `;
+      listEl.appendChild(card);
+    });
+
+    const total = getAllNotices().length;
+    document.getElementById('notice-count-badge').textContent = total + ' Posted';
+  }
+
+  function postNotice() {
+    const title = document.getElementById('notice-title').value.trim();
+    const cat   = document.getElementById('notice-cat').value;
+    const body  = document.getElementById('notice-body').value.trim();
+    const sucEl = document.getElementById('notice-success');
+
+    let valid = true;
+    [['notice-title', title], ['notice-cat', cat], ['notice-body', body]].forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if (!val) { el.style.borderColor = 'var(--danger)'; valid = false; }
+      else        { el.style.borderColor = ''; }
+    });
+    if (!valid) return;
+
+    const notices = getAllNotices();
+    const now = new Date();
+    const date = now.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+    notices.unshift({ id: 'n_' + Date.now(), cat, date, title, body });
+    saveNotices(notices);
+    renderNotices();
+
+    sucEl.style.display = 'block';
+    setTimeout(() => sucEl.style.display = 'none', 3500);
+    document.getElementById('notice-title').value = '';
+    document.getElementById('notice-cat').value   = '';
+    document.getElementById('notice-body').value  = '';
+  }
+
+  function deleteNotice(btn) {
+    const card = btn.closest('.notice-card');
+    const id   = card.dataset.id;
+    const notices = getAllNotices().filter(n => n.id !== id);
+    saveNotices(notices);
+    card.style.opacity   = '0';
+    card.style.transform = 'translateX(20px)';
+    card.style.transition = 'opacity 0.25s, transform 0.25s';
+    setTimeout(() => { card.remove(); document.getElementById('notice-count-badge').textContent = getAllNotices().length + ' Posted'; }, 250);
+  }
+
+  function filterNotices(filter, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderNotices(filter);
+  }
+
+  seedNotices();
+  renderNotices();
+
+  document.getElementById('sidebarToggle').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('open');
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Queries — DAV College Student Portal</title>
+  <link rel="stylesheet" href="../portal.css" />
+</head>
+<body>
+
+<button class="sidebar-toggle" id="sidebarToggle">
+  <span></span><span></span><span></span>
+</button>
+
+<div class="portal-wrap">
+
+  <!-- ═══════ SIDEBAR ═══════ -->
+  <aside class="p-sidebar" id="sidebar">
+    <div class="ps-brand">
+      <div class="ps-brand-logo">DAV</div>
+      <div>
+        <div class="ps-brand-name">D.A.V. College</div>
+        <div class="ps-brand-sub">Hoshiarpur · Est. 1926</div>
+      </div>
+    </div>
+    <div class="ps-user">
+      <div class="ps-avatar">AV</div>
+      <div class="ps-user-name">Arjun Verma</div>
+      <div class="ps-user-sub">Roll No: student123</div>
+      <span class="ps-user-badge">B.Sc. Computer Science</span>
+    </div>
+    <nav class="ps-nav">
+      <a href="dashboard.html" class="ps-link"><span class="ps-icon">📊</span> Dashboard</a>
+      <a href="results.html"   class="ps-link"><span class="ps-icon">📝</span> Results</a>
+      <a href="timetable.html" class="ps-link"><span class="ps-icon">📅</span> Timetable</a>
+      <a href="queries.html"   class="ps-link active"><span class="ps-icon">💬</span> My Queries</a>
+    </nav>
+    <div class="ps-logout">
+      <button class="ps-logout-btn" onclick="portalLogout()"><span>🚪</span> Logout</button>
+    </div>
+  </aside>
+
+  <!-- ═══════ MAIN ═══════ -->
+  <main class="p-main">
+
+    <div class="p-topbar">
+      <div class="p-topbar-left">
+        <h1>My Queries</h1>
+        <p>Ask your teachers — they'll reply directly here</p>
+      </div>
+      <div class="p-topbar-right">
+        <span class="topbar-badge" id="pending-badge">0 Pending</span>
+      </div>
+    </div>
+
+    <div class="p-content">
+
+      <div class="grid-2" style="align-items: start;">
+
+        <!-- SUBMIT FORM -->
+        <div class="card" style="position: sticky; top: 80px;">
+          <div class="card-header">
+            <span class="card-title">✍️ Submit New Query</span>
+          </div>
+          <div class="card-body">
+
+            <div id="success-msg" style="display:none;" class="alert alert-success" style="margin-bottom:1rem;">
+              ✅ Query submitted! Your teacher will reply within 24–48 hours.
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="q-subject">Subject</label>
+              <select id="q-subject" class="form-select">
+                <option value="">— Select Subject —</option>
+                <option value="Data Structures">Data Structures</option>
+                <option value="Database Management">Database Management</option>
+                <option value="Web Technologies">Web Technologies</option>
+                <option value="Discrete Mathematics">Discrete Mathematics</option>
+                <option value="Operating Systems">Operating Systems</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="q-text">Your Question</label>
+              <textarea id="q-text" class="form-textarea"
+                placeholder="Describe your doubt clearly. e.g. 'I don't understand how AVL rotations work after insertion…'"
+                style="min-height: 140px;"></textarea>
+              <span class="form-hint">Be specific — the more detail you give, the better the reply.</span>
+            </div>
+
+            <button class="btn btn-primary btn-full" onclick="submitQuery()">
+              📤 &nbsp; Submit Query
+            </button>
+
+            <div style="margin-top: 1.2rem; padding-top: 1.2rem; border-top: 1px solid var(--border);">
+              <p style="font-size: 0.75rem; color: var(--muted); margin: 0; line-height: 1.6;">
+                💡 <strong>Tip:</strong> Teachers typically reply within 24–48 hours. For urgent doubts during class hours, please visit them directly.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- QUERIES LIST -->
+        <div>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+            <h3 style="font-family: var(--font-head); font-size: 1rem; color: var(--navy);">
+              Previous Queries
+            </h3>
+            <div class="filter-row">
+              <button class="filter-btn active" onclick="filterQ('all', this)">All</button>
+              <button class="filter-btn" onclick="filterQ('pending', this)">Pending</button>
+              <button class="filter-btn" onclick="filterQ('answered', this)">Answered</button>
+            </div>
+          </div>
+
+          <div id="queries-list">
+            <p id="no-queries" style="display:none; color:var(--muted); font-size:0.875rem;">
+              No queries yet. Submit your first question!
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="../portal.js"></script>
+<script>
+  requireStudentLogin();
+
+  function renderQueries() {
+    const queries = getAllQueries();
+    const listEl = document.getElementById('queries-list');
+    listEl.querySelectorAll('.query-card').forEach(c => c.remove());
+
+    const pending = queries.filter(q => q.status === 'pending').length;
+    document.getElementById('pending-badge').textContent = pending + ' Pending';
+
+    if (queries.length === 0) {
+      document.getElementById('no-queries').style.display = 'block';
+      return;
+    }
+    document.getElementById('no-queries').style.display = 'none';
+
+    queries.forEach(q => {
+      const card = document.createElement('div');
+      card.className = 'query-card';
+      card.dataset.status = q.status;
+
+      const replyHtml = q.status === 'answered' && q.reply
+        ? `<div class="query-reply">
+             <div class="query-reply-by">✅ ${escapeHtml(q.repliedBy || 'Teacher')}</div>
+             ${escapeHtml(q.reply)}
+           </div>`
+        : `<div class="query-pending">⏳ Awaiting teacher response…</div>`;
+
+      card.innerHTML = `
+        <div class="query-card-top">
+          <div>
+            <div class="query-subject">${escapeHtml(q.subject)}</div>
+            <div class="query-date">${escapeHtml(q.date)}</div>
+          </div>
+          ${q.status === 'answered'
+            ? '<span class="badge badge-success">Answered</span>'
+            : '<span class="badge badge-warn">Pending</span>'}
+        </div>
+        <div class="query-text">${escapeHtml(q.text)}</div>
+        ${replyHtml}
+      `;
+      listEl.appendChild(card);
+    });
+  }
+
+  function submitQuery() {
+    const subject = document.getElementById('q-subject').value;
+    const text    = document.getElementById('q-text').value.trim();
+    const subEl   = document.getElementById('q-subject');
+    const txtEl   = document.getElementById('q-text');
+    const sucEl   = document.getElementById('success-msg');
+
+    let valid = true;
+    if (!subject) { subEl.style.borderColor = 'var(--danger)'; valid = false; }
+    else           { subEl.style.borderColor = ''; }
+    if (!text)     { txtEl.style.borderColor = 'var(--danger)'; valid = false; }
+    else           { txtEl.style.borderColor = ''; }
+    if (!valid) return;
+
+    addQuery(subject, text);
+    renderQueries();
+
+    sucEl.style.display = 'block';
+    setTimeout(() => sucEl.style.display = 'none', 3500);
+    subEl.value = '';
+    txtEl.value = '';
+  }
+
+  function filterQ(filter, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.query-card').forEach(card => {
+      if (filter === 'all') card.style.display = '';
+      else card.style.display = card.dataset.status === filter ? '' : 'none';
+    });
+  }
+
+  renderQueries();
+
+  document.getElementById('sidebarToggle').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('open');
+  });
+</script>
+</body>
+</html>

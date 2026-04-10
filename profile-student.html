@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Profile — D.A.V. College Hoshiarpur</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="login.css" />
+  <style>
+    .profile-grid { display: grid; grid-template-columns: 280px 1fr; gap: 2rem; align-items: start; }
+    .profile-sidebar { position: sticky; top: 88px; }
+    .profile-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 2rem 1.5rem;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--light-gray);
+      text-align: center;
+    }
+    .profile-avatar {
+      width: 96px; height: 96px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-head); font-weight: 900;
+      font-size: 2rem; color: var(--gold-light);
+      margin: 0 auto 1rem;
+      border: 3px solid var(--gold);
+    }
+    .profile-name { font-family: var(--font-head); font-size: 1.2rem; color: var(--navy); margin-bottom: 0.25rem; }
+    .profile-roll { font-size: 0.82rem; color: var(--mid-gray); margin-bottom: 0.8rem; }
+    .profile-badge { display: inline-block; }
+    .sidebar-nav { margin-top: 1.5rem; }
+    .sidebar-nav-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.65rem 0.8rem; border-radius: var(--radius);
+      font-size: 0.9rem; font-weight: 600; color: var(--dark-gray);
+      cursor: pointer; transition: var(--transition);
+      border: none; background: none; width: 100%; text-align: left;
+    }
+    .sidebar-nav-item:hover, .sidebar-nav-item.active { background: rgba(13,33,71,0.07); color: var(--navy); }
+    .sidebar-nav-item.active { color: var(--gold); }
+    .logout-btn {
+      width: 100%; margin-top: 1.2rem; padding: 0.6rem;
+      background: none; border: 1.5px solid #fca5a5;
+      border-radius: var(--radius); color: #b91c1c;
+      font-size: 0.85rem; font-weight: 700; cursor: pointer;
+      transition: var(--transition);
+    }
+    .logout-btn:hover { background: #fff5f5; }
+    .dashboard-welcome {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+      border-radius: var(--radius-lg);
+      padding: 1.8rem 2rem;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+      position: relative; overflow: hidden;
+    }
+    .dashboard-welcome::after {
+      content:''; position:absolute; right:-40px; top:-40px;
+      width:220px; height:220px; border-radius:50%;
+      background: radial-gradient(circle, rgba(200,145,42,0.2) 0%, transparent 70%);
+    }
+    .dashboard-welcome h3 { color: var(--white); margin-bottom: 0.25rem; position:relative; z-index:1; }
+    .dashboard-welcome p { color: rgba(255,255,255,0.7); margin:0; font-size:0.9rem; position:relative; z-index:1; }
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .stat-box {
+      background: var(--white); border-radius: var(--radius-lg);
+      padding: 1.2rem 1.4rem; box-shadow: var(--shadow-sm);
+      border: 1px solid var(--light-gray);
+    }
+    .stat-box-num { font-family: var(--font-head); font-size: 1.8rem; font-weight: 900; color: var(--navy); line-height:1; margin-bottom:0.25rem; }
+    .stat-box-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--mid-gray); }
+    .content-card {
+      background: var(--white); border-radius: var(--radius-lg);
+      padding: 1.5rem; box-shadow: var(--shadow-sm);
+      border: 1px solid var(--light-gray); margin-bottom: 1.2rem;
+    }
+    .content-card h4 { margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--light-gray); }
+    @media(max-width: 860px) {
+      .profile-grid { grid-template-columns: 1fr; }
+      .profile-sidebar { position: static; }
+      .stat-row { grid-template-columns: 1fr 1fr; }
+    }
+    @media(max-width: 500px) { .stat-row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <div>📍 Chandigarh Road, Hoshiarpur, Punjab 146001</div>
+      <div class="top-bar-contact">
+        <a href="tel:+911882242525">📞 01882-242525</a>
+      </div>
+    </div>
+  </div>
+
+  <nav id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-brand">
+        <div class="nav-brand-logo">DAV</div>
+        <div class="nav-brand-text">
+          <div class="college-name">D.A.V. College Hoshiarpur</div>
+          <div class="college-sub">Est. 1926 · NAAC Grade 'A'</div>
+        </div>
+      </a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="courses.html">Courses</a></li>
+        <li><a href="services.html">Student Services</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+    </div>
+  </nav>
+
+  <section class="section" style="padding: 50px 0 80px;">
+    <div class="container">
+
+      <div class="breadcrumb" style="margin-bottom: 1.5rem;">
+        <a href="index.html">Home</a>
+        <span>/</span>
+        <span style="color:var(--gold-light);">Student Dashboard</span>
+      </div>
+
+      <div class="profile-grid">
+
+        <!-- Sidebar -->
+        <div class="profile-sidebar">
+          <div class="profile-card">
+            <div class="profile-avatar" id="avatarInitials">S</div>
+            <div class="profile-name" id="profileName">Rahul Sharma</div>
+            <div class="profile-roll" id="profileRoll">Roll No: DAV2024CS001</div>
+            <span class="pill pill-navy">B.Sc Computer Science</span>
+            <div class="sidebar-nav">
+              <button class="sidebar-nav-item active">📊 Overview</button>
+              <button class="sidebar-nav-item">📅 Timetable</button>
+              <button class="sidebar-nav-item">📝 Results</button>
+              <button class="sidebar-nav-item">🔔 Notices</button>
+              <button class="sidebar-nav-item">📄 Documents</button>
+            </div>
+            <button class="logout-btn" onclick="logout()">🚪 Sign Out</button>
+          </div>
+        </div>
+
+        <!-- Main content -->
+        <div>
+          <div class="dashboard-welcome">
+            <h3>Welcome back, <span id="welcomeName">Rahul</span> 👋</h3>
+            <p>Session 2024–25 · Semester IV · Last login: Today</p>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-box">
+              <div class="stat-box-num">87%</div>
+              <div class="stat-box-label">Attendance</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-num">6</div>
+              <div class="stat-box-label">Active Courses</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-num">3</div>
+              <div class="stat-box-label">Pending Notices</div>
+            </div>
+          </div>
+
+          <div class="content-card">
+            <h4>📋 Today's Classes</h4>
+            <div class="table-wrap">
+              <table class="styled-table">
+                <thead>
+                  <tr><th>Time</th><th>Subject</th><th>Room</th><th>Faculty</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>9:00 AM</td><td>Data Structures</td><td>CS-Lab 1</td><td>Dr. A. Sharma</td></tr>
+                  <tr><td>11:00 AM</td><td>Operating Systems</td><td>Room 204</td><td>Prof. R. Verma</td></tr>
+                  <tr><td>2:00 PM</td><td>DBMS</td><td>CS-Lab 2</td><td>Dr. P. Kaur</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="content-card">
+            <h4>🔔 Recent Notices</h4>
+            <ul class="info-list">
+              <li>Semester IV practical exams scheduled for 28th April 2025.</li>
+              <li>Sports Day registrations open till 15th April — contact Sports Department.</li>
+              <li>Fee payment deadline for next semester: 30th April 2025.</li>
+            </ul>
+          </div>
+
+          <div class="content-card">
+            <h4>📊 Attendance Summary</h4>
+            <div class="table-wrap">
+              <table class="styled-table">
+                <thead>
+                  <tr><th>Subject</th><th>Classes Held</th><th>Present</th><th>%</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Data Structures</td><td>32</td><td>28</td><td><span class="pill pill-green">87.5%</span></td></tr>
+                  <tr><td>Operating Systems</td><td>28</td><td>25</td><td><span class="pill pill-green">89.3%</span></td></tr>
+                  <tr><td>DBMS</td><td>30</td><td>24</td><td><span class="pill pill-gold">80.0%</span></td></tr>
+                  <tr><td>Computer Networks</td><td>26</td><td>20</td><td><span class="pill pill-navy">76.9%</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="padding:24px 0; background:var(--navy);">
+    <div class="container" style="text-align:center;">
+      <span style="font-size:0.8rem;color:rgba(255,255,255,0.4);">
+        © 2025 D.A.V. College Hoshiarpur ·
+        <a href="index.html" style="color:var(--gold-light);">Home</a>
+      </span>
+    </div>
+  </footer>
+
+  <button id="scroll-top" title="Back to top">↑</button>
+  <script src="nav.js"></script>
+  <script>
+    // Guard: redirect if not logged in
+    const role = sessionStorage.getItem('dav_user_role');
+    if (role !== 'student') window.location.href = 'login.html';
+
+    function logout() {
+      sessionStorage.clear();
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

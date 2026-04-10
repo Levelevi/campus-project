@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — DAV College Student Portal</title>
+  <link rel="stylesheet" href="../portal.css" />
+</head>
+<body>
+
+<button class="sidebar-toggle" id="sidebarToggle">
+  <span></span><span></span><span></span>
+</button>
+
+<div class="portal-wrap">
+
+  <!-- ═══════ SIDEBAR ═══════ -->
+  <aside class="p-sidebar" id="sidebar">
+    <div class="ps-brand">
+      <div class="ps-brand-logo">DAV</div>
+      <div>
+        <div class="ps-brand-name">D.A.V. College</div>
+        <div class="ps-brand-sub">Hoshiarpur · Est. 1926</div>
+      </div>
+    </div>
+
+    <div class="ps-user">
+      <div class="ps-avatar">AV</div>
+      <div class="ps-user-name">Arjun Verma</div>
+      <div class="ps-user-sub">Roll No: student123</div>
+      <span class="ps-user-badge">B.Sc. Computer Science</span>
+    </div>
+
+    <nav class="ps-nav">
+      <a href="dashboard.html" class="ps-link active">
+        <span class="ps-icon">📊</span> Dashboard
+      </a>
+      <a href="results.html" class="ps-link">
+        <span class="ps-icon">📝</span> Results
+      </a>
+      <a href="timetable.html" class="ps-link">
+        <span class="ps-icon">📅</span> Timetable
+      </a>
+      <a href="queries.html" class="ps-link">
+        <span class="ps-icon">💬</span> My Queries
+      </a>
+    </nav>
+
+    <div class="ps-logout">
+      <button class="ps-logout-btn" onclick="portalLogout()">
+        <span>🚪</span> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- ═══════ MAIN ═══════ -->
+  <main class="p-main">
+
+    <div class="p-topbar">
+      <div class="p-topbar-left">
+        <h1>Dashboard</h1>
+        <p>Academic Year 2024–25 · 5th Semester</p>
+      </div>
+      <div class="p-topbar-right">
+        <span class="topbar-badge">🏅 NAAC Grade A</span>
+      </div>
+    </div>
+
+    <div class="p-content">
+
+      <!-- WELCOME BAR -->
+      <div style="background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+                  border-radius: var(--radius-lg); padding: 1.5rem 2rem;
+                  display: flex; align-items: center; justify-content: space-between;
+                  margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; position: relative; overflow: hidden;">
+        <div style="position: absolute; right: -30px; top: -30px; width: 160px; height: 160px;
+                    background: radial-gradient(circle, rgba(200,145,42,0.2) 0%, transparent 70%);
+                    border-radius: 50%;"></div>
+        <div style="position: relative;">
+          <h2 id="greeting-msg" style="color: var(--white); font-size: 1.2rem; margin-bottom: 4px;">Good morning 👋</h2>
+          <p style="color: rgba(255,255,255,0.6); font-size: 0.82rem; margin: 0;">B.Sc. Computer Science · Semester V · Room CS-201</p>
+        </div>
+        <div style="background: rgba(200,145,42,0.2); border: 1px solid rgba(200,145,42,0.4);
+                    color: var(--gold-light); font-size: 0.78rem; font-weight: 700;
+                    padding: 6px 16px; border-radius: 100px; position: relative;">
+          5th Semester
+        </div>
+      </div>
+
+      <!-- STAT CARDS -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon gold">📚</div>
+          <div class="stat-value">5</div>
+          <div class="stat-label">Subjects Enrolled</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">✅</div>
+          <div class="stat-value" id="overall-att">—</div>
+          <div class="stat-label">Overall Attendance</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon navy">📝</div>
+          <div class="stat-value">7.8</div>
+          <div class="stat-label">Current SGPA</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" id="query-icon" style="background: var(--gold-pale);">💬</div>
+          <div class="stat-value" id="pending-queries">—</div>
+          <div class="stat-label">Pending Queries</div>
+        </div>
+      </div>
+
+      <!-- ATTENDANCE + NOTICES ROW -->
+      <div class="grid-2" style="margin-bottom: 1.5rem; align-items: start;">
+
+        <!-- Attendance -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📊 Attendance Overview</span>
+            <span class="badge" id="att-summary-badge">—</span>
+          </div>
+          <div class="att-grid" id="att-grid" style="grid-template-columns: repeat(3,1fr);"></div>
+          <div id="att-alerts" style="padding: 0 1.5rem 1.2rem;"></div>
+        </div>
+
+        <!-- Notice Board -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📢 Notice Board</span>
+            <span class="badge badge-navy">5 notices</span>
+          </div>
+          <div class="notice-list">
+            <div class="notice-item">
+              <span class="notice-date">3 days ago</span>
+              <div>
+                <div class="notice-text">Exam form submission last date: 30th November</div>
+                <div class="notice-meta">Admin &nbsp;·&nbsp; <span class="badge badge-danger">Urgent</span></div>
+              </div>
+            </div>
+            <div class="notice-item">
+              <span class="notice-date">1 week ago</span>
+              <div>
+                <div class="notice-text">Annual Fest "Utsav 2025" — Registrations now open!</div>
+                <div class="notice-meta">Student Council &nbsp;·&nbsp; <span class="badge badge-gold">Event</span></div>
+              </div>
+            </div>
+            <div class="notice-item">
+              <span class="notice-date">2 weeks ago</span>
+              <div>
+                <div class="notice-text">Library closed on 25th November (Gurpurab holiday)</div>
+                <div class="notice-meta">Library Dept.</div>
+              </div>
+            </div>
+            <div class="notice-item">
+              <span class="notice-date">3 weeks ago</span>
+              <div>
+                <div class="notice-text">Internal Assessment schedule for November uploaded</div>
+                <div class="notice-meta">Examination Cell</div>
+              </div>
+            </div>
+            <div class="notice-item">
+              <span class="notice-date">1 month ago</span>
+              <div>
+                <div class="notice-text">Panjab University practical dates announced</div>
+                <div class="notice-meta">Admin</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- QUICK ACTIONS + UPCOMING -->
+      <div class="grid-2" style="align-items: start;">
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">⚡ Quick Actions</span>
+          </div>
+          <div class="card-body" style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <a href="results.html" class="quick-btn">
+              <span class="quick-btn-icon">📝</span>
+              <span>View Semester Results</span>
+            </a>
+            <a href="timetable.html" class="quick-btn">
+              <span class="quick-btn-icon">📅</span>
+              <span>Check Weekly Timetable</span>
+            </a>
+            <a href="queries.html" class="quick-btn">
+              <span class="quick-btn-icon">💬</span>
+              <span>Ask a Query / Doubt</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🗓️ Upcoming Deadlines</span>
+          </div>
+          <div class="notice-list">
+            <div class="notice-item">
+              <span class="notice-date">30 Nov</span>
+              <div>
+                <div class="notice-text">Exam form submission deadline</div>
+                <div class="notice-meta"><span class="badge badge-danger">Urgent</span></div>
+              </div>
+            </div>
+            <div class="notice-item">
+              <span class="notice-date">5 Dec</span>
+              <div>
+                <div class="notice-text">Internal Assessment — DS &amp; DBMS</div>
+                <div class="notice-meta">Examination Cell</div>
+              </div>
+            </div>
+            <div class="notice-item">
+              <span class="notice-date">10 Dec</span>
+              <div>
+                <div class="notice-text">Project submission — Web Technologies</div>
+                <div class="notice-meta">CS Dept.</div>
+              </div>
+            </div>
+            <div class="notice-item" style="border-bottom: none;">
+              <span class="notice-date">15 Dec</span>
+              <div>
+                <div class="notice-text">End Semester Examinations begin</div>
+                <div class="notice-meta"><span class="badge badge-navy">Panjab University</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div><!-- /p-content -->
+  </main>
+</div>
+
+<script src="../portal.js"></script>
+<script>
+  requireStudentLogin();
+
+  // Greeting
+  const hr = new Date().getHours();
+  document.getElementById('greeting-msg').textContent =
+    (hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening') + ', Arjun 👋';
+
+  // Attendance rings
+  const att = STUDENT_DATA.attendance;
+  const subjects = Object.entries(att);
+  const overall = Math.round(subjects.reduce((s, [,v]) => s + v, 0) / subjects.length);
+  document.getElementById('overall-att').textContent = overall + '%';
+
+  const grid = document.getElementById('att-grid');
+  const atRisk = [];
+
+  subjects.forEach(([subj, pct]) => {
+    const b = attendanceBadge(pct);
+    const short = subj.replace('Database Management', 'DBMS').replace('Discrete Mathematics', 'Disc. Math').replace('Operating Systems', 'OS').replace('Web Technologies', 'Web Tech');
+    const ringCls = pct >= 75 ? 'ring-success' : pct >= 60 ? 'ring-warn' : 'ring-danger';
+    const offset = ringOffset(pct);
+    if (pct < 75) atRisk.push({ subj, pct });
+
+    const card = document.createElement('div');
+    card.className = 'att-card';
+    card.innerHTML = `
+      <div class="att-subject">${escapeHtml(short)}</div>
+      <div class="ring-wrap">
+        <svg viewBox="0 0 72 72" width="72" height="72">
+          <circle class="ring-bg" cx="36" cy="36" r="30"/>
+          <circle class="ring-fill ${ringCls}" cx="36" cy="36" r="30"
+            stroke-dasharray="188.5" stroke-dashoffset="${offset}"/>
+        </svg>
+        <div class="ring-val">${pct}%</div>
+      </div>
+      <span class="badge ${b.cls}">${b.label}</span>
+    `;
+    grid.appendChild(card);
+  });
+
+  // Summary badge
+  const dangerCount = subjects.filter(([,v]) => v < 60).length;
+  const warnCount   = subjects.filter(([,v]) => v >= 60 && v < 75).length;
+  const sb = document.getElementById('att-summary-badge');
+  if (dangerCount > 0) { sb.textContent = dangerCount + ' At Risk'; sb.className = 'badge badge-danger'; }
+  else if (warnCount > 0) { sb.textContent = warnCount + ' Low'; sb.className = 'badge badge-warn'; }
+  else { sb.textContent = 'All Good ✓'; sb.className = 'badge badge-success'; }
+
+  // Alerts
+  const alertEl = document.getElementById('att-alerts');
+  atRisk.forEach(({ subj, pct }) => {
+    const div = document.createElement('div');
+    div.className = pct < 60 ? 'alert alert-danger' : 'alert alert-warn';
+    div.innerHTML = `⚠️ <strong>${escapeHtml(subj)}</strong> — ${pct}% attendance. ${pct < 60 ? 'Risk of detention!' : 'Minimum required is 75%.'}`;
+    alertEl.appendChild(div);
+  });
+
+  // Pending queries
+  const pending = getAllQueries().filter(q => q.status === 'pending').length;
+  document.getElementById('pending-queries').textContent = pending;
+
+  // Mobile sidebar toggle
+  document.getElementById('sidebarToggle').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('open');
+  });
+</script>
+</body>
+</html>

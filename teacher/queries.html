@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Queries — DAV College Staff Portal</title>
+  <link rel="stylesheet" href="../portal.css" />
+  <style>
+    /* Query cards for teacher view — richer than student side */
+    .tq-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      margin-bottom: 1.1rem;
+      overflow: hidden;
+      transition: var(--trans);
+    }
+    .tq-card:hover { box-shadow: var(--shadow-md); }
+
+    .tq-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 1.1rem 1.4rem 0.6rem;
+      gap: 1rem;
+    }
+    .tq-student {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .tq-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 800; color: var(--white);
+      flex-shrink: 0;
+    }
+    .tq-student-name { font-weight: 700; font-size: 0.88rem; color: var(--navy); }
+    .tq-student-roll { font-size: 0.68rem; color: var(--muted); }
+    .tq-meta { font-size: 0.72rem; color: var(--muted); margin-top: 3px; }
+
+    .tq-subject-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.4rem;
+      background: var(--off);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: 0.04em;
+    }
+
+    .tq-question {
+      padding: 0.9rem 1.4rem;
+      font-size: 0.875rem;
+      color: var(--text);
+      line-height: 1.7;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Existing reply (answered) */
+    .tq-existing-reply {
+      padding: 1rem 1.4rem;
+      background: var(--success-bg);
+      border-left: 3px solid var(--success);
+      margin: 0.8rem 1.4rem;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      font-size: 0.83rem;
+      color: #145e36;
+      line-height: 1.65;
+    }
+    .tq-reply-by {
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: var(--success);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 5px;
+    }
+    .tq-answered-footer {
+      padding: 0.6rem 1.4rem 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Reply form (pending) */
+    .tq-reply-form {
+      padding: 1rem 1.4rem 1.2rem;
+    }
+    .tq-reply-input {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      color: var(--text);
+      resize: vertical;
+      min-height: 100px;
+      outline: none;
+      transition: var(--trans);
+      margin-bottom: 0.75rem;
+    }
+    .tq-reply-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(200,145,42,0.12);
+    }
+    .tq-send-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1.3rem;
+      background: var(--navy);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--trans);
+    }
+    .tq-send-btn:hover { background: var(--navy-light); transform: translateY(-1px); }
+    .tq-send-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    /* Success flash on a card */
+    .reply-flash {
+      animation: flashGreen 0.5s ease;
+    }
+    @keyframes flashGreen {
+      0%   { border-color: var(--success); box-shadow: 0 0 0 3px var(--success-bg); }
+      100% { border-color: var(--border);  box-shadow: var(--shadow); }
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: var(--muted);
+    }
+    .empty-state .e-icon { font-size: 3rem; margin-bottom: 0.75rem; }
+    .empty-state h3 { color: var(--navy); font-size: 1rem; margin-bottom: 0.4rem; }
+    .empty-state p  { font-size: 0.82rem; }
+  </style>
+</head>
+<body>
+
+<button class="sidebar-toggle" id="sidebarToggle">
+  <span></span><span></span><span></span>
+</button>
+
+<div class="portal-wrap">
+
+  <!-- ═══════ SIDEBAR ═══════ -->
+  <aside class="p-sidebar" id="sidebar">
+    <div class="ps-brand">
+      <div class="ps-brand-logo">DAV</div>
+      <div>
+        <div class="ps-brand-name">D.A.V. College</div>
+        <div class="ps-brand-sub">Staff Portal · Est. 1926</div>
+      </div>
+    </div>
+    <div class="ps-user">
+      <div class="ps-avatar">PK</div>
+      <div class="ps-user-name">Dr. Priya Sharma</div>
+      <div class="ps-user-sub">Emp ID: teacher123</div>
+      <span class="ps-user-badge">Computer Science</span>
+    </div>
+    <nav class="ps-nav">
+      <a href="dashboard.html" class="ps-link"><span class="ps-icon">🏠</span> Dashboard</a>
+      <a href="notices.html"   class="ps-link"><span class="ps-icon">📢</span> Notices</a>
+      <a href="queries.html"   class="ps-link active"><span class="ps-icon">💬</span> Student Queries</a>
+    </nav>
+    <div class="ps-logout">
+      <button class="ps-logout-btn" onclick="teacherLogout()"><span>🚪</span> Logout</button>
+    </div>
+  </aside>
+
+  <!-- ═══════ MAIN ═══════ -->
+  <main class="p-main">
+
+    <div class="p-topbar">
+      <div class="p-topbar-left">
+        <h1>Student Queries</h1>
+        <p>Review &amp; reply to questions from your students</p>
+      </div>
+      <div class="p-topbar-right">
+        <span class="topbar-badge" id="topbar-pending">Loading…</span>
+      </div>
+    </div>
+
+    <div class="p-content">
+
+      <!-- STAT CARDS -->
+      <div class="stats-row" style="margin-bottom:1.5rem;">
+        <div class="stat-card">
+          <div class="stat-icon navy">📬</div>
+          <div class="stat-value" id="stat-total">—</div>
+          <div class="stat-label">Total Queries</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--warn-bg);">⏳</div>
+          <div class="stat-value" id="stat-pending">—</div>
+          <div class="stat-label">Pending</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">✅</div>
+          <div class="stat-value" id="stat-answered">—</div>
+          <div class="stat-label">Answered</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon gold">⚡</div>
+          <div class="stat-value" id="stat-rate">—</div>
+          <div class="stat-label">Response Rate</div>
+        </div>
+      </div>
+
+      <!-- FILTER + SORT -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:0.75rem;">
+        <div class="filter-row">
+          <button class="filter-btn active" data-filter="all"      onclick="applyFilter('all', this)">
+            All &nbsp;<span id="cnt-all" style="opacity:0.65;">0</span>
+          </button>
+          <button class="filter-btn"         data-filter="pending"  onclick="applyFilter('pending', this)">
+            ⏳ Pending &nbsp;<span id="cnt-pending" style="opacity:0.65;">0</span>
+          </button>
+          <button class="filter-btn"         data-filter="answered" onclick="applyFilter('answered', this)">
+            ✅ Answered &nbsp;<span id="cnt-answered" style="opacity:0.65;">0</span>
+          </button>
+        </div>
+        <select id="sort-select" class="form-select" style="max-width:180px;padding:0.45rem 0.75rem;"
+                onchange="renderQueries()">
+          <option value="newest">Newest First</option>
+          <option value="pending">Pending First</option>
+          <option value="subject">By Subject</option>
+        </select>
+      </div>
+
+      <!-- QUERIES LIST -->
+      <div id="queries-list"></div>
+
+    </div>
+  </main>
+</div>
+
+<script src="../portal.js"></script>
+<script>
+  requireTeacherLogin();
+
+  let currentFilter = 'all';
+
+  /* ── Update counters ── */
+  function updateStats() {
+    const all = getAllQueries();
+    const pending  = all.filter(q => q.status === 'pending').length;
+    const answered = all.filter(q => q.status === 'answered').length;
+    const rate = all.length > 0 ? Math.round(answered / all.length * 100) + '%' : '—';
+
+    document.getElementById('stat-total').textContent    = all.length;
+    document.getElementById('stat-pending').textContent  = pending;
+    document.getElementById('stat-answered').textContent = answered;
+    document.getElementById('stat-rate').textContent     = rate;
+    document.getElementById('topbar-pending').textContent = pending > 0 ? pending + ' Pending' : 'All Answered ✓';
+    document.getElementById('cnt-all').textContent       = all.length;
+    document.getElementById('cnt-pending').textContent   = pending;
+    document.getElementById('cnt-answered').textContent  = answered;
+  }
+
+  /* ── Render query cards ── */
+  function renderQueries() {
+    const listEl = document.getElementById('queries-list');
+    listEl.innerHTML = '';
+
+    let queries = getAllQueries();
+
+    // Sort
+    const sort = document.getElementById('sort-select').value;
+    if (sort === 'pending')  queries.sort((a,b) => (a.status === 'pending' ? -1 : 1));
+    else if (sort === 'subject') queries.sort((a,b) => a.subject.localeCompare(b.subject));
+    // 'newest' — already in insertion order (newest first via unshift)
+
+    // Filter
+    if (currentFilter !== 'all') {
+      queries = queries.filter(q => q.status === currentFilter);
+    }
+
+    if (queries.length === 0) {
+      listEl.innerHTML = `
+        <div class="empty-state">
+          <div class="e-icon">${currentFilter === 'pending' ? '🎉' : '💬'}</div>
+          <h3>${currentFilter === 'pending' ? 'All caught up!' : 'No queries found'}</h3>
+          <p>${currentFilter === 'pending' ? 'All student queries have been answered.' : 'No queries match the current filter.'}</p>
+        </div>`;
+      return;
+    }
+
+    // Avatar colors
+    const AVATAR_COLORS = ['#0d2147','#1a8a50','#c8912a','#7c3aed','#0369a1','#b91c1c'];
+
+    queries.forEach((q, idx) => {
+      const isPending  = q.status === 'pending';
+      const avatarColor = AVATAR_COLORS[idx % AVATAR_COLORS.length];
+
+      // Initials from query — use first letters of subject code or "ST"
+      const initials = (q.subject || 'ST').split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
+
+      const card = document.createElement('div');
+      card.className = 'tq-card';
+      card.dataset.queryId = q.id;
+      card.dataset.status  = q.status;
+
+      const replySection = isPending
+        ? `<div class="tq-reply-form">
+             <label style="font-size:0.75rem;font-weight:700;color:var(--navy);display:block;margin-bottom:0.5rem;letter-spacing:0.03em;">
+               YOUR REPLY
+             </label>
+             <textarea class="tq-reply-input" placeholder="Write a clear, helpful reply for ${escapeHtml(q.subject)}…"></textarea>
+             <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+               <button class="tq-send-btn" onclick="sendReply(this)">
+                 ✅ &nbsp; Send Reply
+               </button>
+               <span class="send-feedback" style="font-size:0.78rem;color:var(--success);display:none;font-weight:600;">
+                 Sent successfully!
+               </span>
+             </div>
+           </div>`
+        : `<div style="padding:0 1.4rem 0;">
+             <div class="tq-existing-reply">
+               <div class="tq-reply-by">✅ You replied · ${escapeHtml(q.repliedBy || 'Dr. Priya Sharma')}</div>
+               ${escapeHtml(q.reply || '')}
+             </div>
+           </div>
+           <div class="tq-answered-footer">
+             <span class="badge badge-success">Answered</span>
+             <span style="font-size:0.72rem;color:var(--muted);">Student can see this reply</span>
+           </div>`;
+
+      card.innerHTML = `
+        <div class="tq-card-top">
+          <div class="tq-student">
+            <div class="tq-avatar" style="background:${avatarColor};">AV</div>
+            <div>
+              <div class="tq-student-name">Arjun Verma</div>
+              <div class="tq-student-roll">student123</div>
+              <div class="tq-meta">${escapeHtml(q.date)}</div>
+            </div>
+          </div>
+          <span class="badge ${isPending ? 'badge-warn' : 'badge-success'}">
+            ${isPending ? '⏳ Pending' : '✅ Answered'}
+          </span>
+        </div>
+
+        <div class="tq-subject-bar">
+          📚 ${escapeHtml(q.subject)}
+        </div>
+
+        <div class="tq-question">${escapeHtml(q.text)}</div>
+
+        ${replySection}
+      `;
+
+      listEl.appendChild(card);
+    });
+
+    updateStats();
+  }
+
+  /* ── Send reply → save to localStorage → re-render ── */
+  function sendReply(btn) {
+    const card      = btn.closest('.tq-card');
+    const textarea  = card.querySelector('.tq-reply-input');
+    const feedback  = card.querySelector('.send-feedback');
+    const queryId   = card.dataset.queryId;
+    const replyText = textarea.value.trim();
+
+    if (!replyText) {
+      textarea.style.borderColor = 'var(--danger)';
+      textarea.focus();
+      textarea.placeholder = '⚠️ Please write a reply before sending.';
+      return;
+    }
+    textarea.style.borderColor = '';
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    // Save to shared localStorage — student will see this immediately
+    const ok = replyQuery(queryId, replyText, 'Dr. Priya Sharma');
+    if (!ok) { alert('Error: Query not found. Refresh the page.'); return; }
+
+    // Brief success flash, then re-render
+    feedback.style.display = 'inline';
+    card.classList.add('reply-flash');
+
+    setTimeout(() => {
+      renderQueries();
+      // Restore filter button state
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.filter === currentFilter);
+      });
+    }, 600);
+  }
+
+  /* ── Filter ── */
+  function applyFilter(filter, btn) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderQueries();
+  }
+
+  // Initial load
+  renderQueries();
+
+  document.getElementById('sidebarToggle').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('open');
+  });
+</script>
+</body>
+</html>

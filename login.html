@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — D.A.V. College Hoshiarpur</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="login.css" />
+</head>
+<body class="login-page">
+
+  <!-- ===== TOP BAR ===== -->
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <div>📍 Chandigarh Road, Hoshiarpur, Punjab 146001</div>
+      <div class="top-bar-contact">
+        <a href="tel:+911882242525">📞 01882-242525</a>
+        <a href="mailto:davchsp@gmail.com">✉ davchsp@gmail.com</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-brand">
+        <div class="nav-brand-logo">DAV</div>
+        <div class="nav-brand-text">
+          <div class="college-name">D.A.V. College Hoshiarpur</div>
+          <div class="college-sub">Est. 1926 · NAAC Grade 'A'</div>
+        </div>
+      </a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="departments.html">Departments</a></li>
+        <li><a href="courses.html">Courses</a></li>
+        <li><a href="services.html">Student Services</a></li>
+        <li><a href="alumni.html">Alumni</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== LOGIN MAIN ===== -->
+  <main class="login-main">
+
+    <!-- Decorative background blobs (matches hero style) -->
+    <div class="login-blob login-blob-1"></div>
+    <div class="login-blob login-blob-2"></div>
+
+    <div class="login-wrapper">
+
+      <!-- ===== ROLE SELECTOR ===== -->
+      <div class="login-role-selector" id="roleSelector">
+        <div class="login-logo-block">
+          <div class="login-logo-circle">DAV</div>
+          <div>
+            <div class="login-logo-title">D.A.V. College Portal</div>
+            <div class="login-logo-sub">Hoshiarpur · Est. 1926</div>
+          </div>
+        </div>
+
+        <h2 class="login-heading">Welcome Back</h2>
+        <p class="login-sub">Select your role to continue to your portal.</p>
+
+        <div class="role-cards">
+          <button class="role-card" id="btnStudent" onclick="showLogin('student')">
+            <div class="role-icon">🎓</div>
+            <div class="role-label">Student</div>
+            <div class="role-desc">Access your courses, results &amp; notices</div>
+            <div class="role-arrow">→</div>
+          </button>
+          <button class="role-card" id="btnTeacher" onclick="showLogin('teacher')">
+            <div class="role-icon">📚</div>
+            <div class="role-label">Teacher</div>
+            <div class="role-desc">Manage classes, attendance &amp; records</div>
+            <div class="role-arrow">→</div>
+          </button>
+        </div>
+
+        <p class="login-footer-note">
+          Having trouble? <a href="contact.html">Contact the College Office</a>
+        </p>
+      </div>
+
+      <!-- ===== STUDENT LOGIN FORM ===== -->
+      <div class="login-form-card hidden" id="studentForm">
+        <button class="login-back-btn" onclick="showSelector()">← Back</button>
+
+        <div class="login-form-header student">
+          <div class="login-form-icon">🎓</div>
+          <div>
+            <div class="login-form-title">Student Login</div>
+            <div class="login-form-subtitle">D.A.V. College Portal</div>
+          </div>
+        </div>
+
+        <form onsubmit="handleLogin(event, 'student')">
+          <div class="form-group">
+            <label for="studentId">Enrollment / Roll Number</label>
+            <input
+              type="text"
+              id="studentId"
+              placeholder="e.g. DAV2024CS001"
+              autocomplete="username"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="studentPass">Password</label>
+            <div class="password-wrap">
+              <input
+                type="password"
+                id="studentPass"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+              />
+              <button type="button" class="toggle-pass" onclick="togglePassword('studentPass', this)">👁</button>
+            </div>
+          </div>
+          <div class="form-row-flex">
+            <label class="remember-label">
+              <input type="checkbox" id="rememberStudent" />
+              <span>Remember me</span>
+            </label>
+            <a href="#" class="forgot-link">Forgot Password?</a>
+          </div>
+          <button type="submit" class="btn-login" id="studentSubmit">
+            <span class="btn-login-text">Sign In</span>
+            <span class="btn-login-spinner hidden" id="studentSpinner">⏳</span>
+          </button>
+          <div class="login-error hidden" id="studentError">
+            ⚠ Invalid credentials. Please try again.
+          </div>
+        </form>
+
+        <div class="demo-hint">
+          <span class="demo-label">Demo credentials</span>
+          <code>ID: student123 &nbsp;·&nbsp; Pass: dav@2025</code>
+        </div>
+      </div>
+
+      <!-- ===== TEACHER LOGIN FORM ===== -->
+      <div class="login-form-card hidden" id="teacherForm">
+        <button class="login-back-btn" onclick="showSelector()">← Back</button>
+
+        <div class="login-form-header teacher">
+          <div class="login-form-icon">📚</div>
+          <div>
+            <div class="login-form-title">Faculty Login</div>
+            <div class="login-form-subtitle">D.A.V. College Portal</div>
+          </div>
+        </div>
+
+        <form onsubmit="handleLogin(event, 'teacher')">
+          <div class="form-group">
+            <label for="teacherId">Employee ID / Email</label>
+            <input
+              type="text"
+              id="teacherId"
+              placeholder="e.g. FAC-2024-001 or email"
+              autocomplete="username"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="teacherPass">Password</label>
+            <div class="password-wrap">
+              <input
+                type="password"
+                id="teacherPass"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+              />
+              <button type="button" class="toggle-pass" onclick="togglePassword('teacherPass', this)">👁</button>
+            </div>
+          </div>
+          <div class="form-row-flex">
+            <label class="remember-label">
+              <input type="checkbox" id="rememberTeacher" />
+              <span>Remember me</span>
+            </label>
+            <a href="#" class="forgot-link">Forgot Password?</a>
+          </div>
+          <button type="submit" class="btn-login" id="teacherSubmit">
+            <span class="btn-login-text">Sign In</span>
+            <span class="btn-login-spinner hidden" id="teacherSpinner">⏳</span>
+          </button>
+          <div class="login-error hidden" id="teacherError">
+            ⚠ Invalid credentials. Please try again.
+          </div>
+        </form>
+
+        <div class="demo-hint">
+          <span class="demo-label">Demo credentials</span>
+          <code>ID: teacher123 &nbsp;·&nbsp; Pass: dav@2025</code>
+        </div>
+      </div>
+
+    </div><!-- /login-wrapper -->
+  </main>
+
+  <!-- ===== FOOTER (minimal) ===== -->
+  <footer style="padding: 24px 0; background: var(--navy);">
+    <div class="container" style="text-align:center;">
+      <span style="font-size:0.8rem; color:rgba(255,255,255,0.4);">
+        © 2025 D.A.V. College Hoshiarpur. All rights reserved. &nbsp;·&nbsp;
+        <a href="index.html" style="color:var(--gold-light);">Back to Home</a>
+      </span>
+    </div>
+  </footer>
+
+  <script src="nav.js"></script>
+  <script src="login.js"></script>
+</body>
+</html>

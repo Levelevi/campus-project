@@ -775,3 +775,19 @@ footer {
 }
 #scroll-top:hover { background: var(--gold); color: var(--navy); }
 #scroll-top.visible { display: flex; }
+/* --- Portal Login button in navbar --- */
+.nav-login-btn {
+  background: var(--gold) !important;
+  color: var(--navy) !important;
+  border-radius: var(--radius) !important;
+  padding: 0.4rem 1rem !important;
+  font-weight: 700 !important;
+  margin-left: 0.5rem;
+  transition: var(--transition);
+}
+.nav-login-btn:hover {
+  background: var(--gold-light) !important;
+  color: var(--navy) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(200,145,42,0.35);
+}

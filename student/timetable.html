@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Timetable — DAV College Student Portal</title>
+  <link rel="stylesheet" href="../portal.css" />
+  <style>
+    .today-class {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+    .today-class h3 { color: var(--white); font-size: 1rem; margin-bottom: 0.75rem; }
+    .today-period {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .today-period:last-child { border-bottom: none; }
+    .today-time {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.5);
+      white-space: nowrap;
+      width: 90px;
+      flex-shrink: 0;
+    }
+    .today-sub {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+    .today-info {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.5);
+      margin-top: 2px;
+    }
+    .now-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      background: rgba(200,145,42,0.2);
+      border: 1px solid rgba(200,145,42,0.35);
+      padding: 2px 8px;
+      border-radius: 100px;
+    }
+  </style>
+</head>
+<body>
+
+<button class="sidebar-toggle" id="sidebarToggle">
+  <span></span><span></span><span></span>
+</button>
+
+<div class="portal-wrap">
+
+  <!-- ═══════ SIDEBAR ═══════ -->
+  <aside class="p-sidebar" id="sidebar">
+    <div class="ps-brand">
+      <div class="ps-brand-logo">DAV</div>
+      <div>
+        <div class="ps-brand-name">D.A.V. College</div>
+        <div class="ps-brand-sub">Hoshiarpur · Est. 1926</div>
+      </div>
+    </div>
+    <div class="ps-user">
+      <div class="ps-avatar">AV</div>
+      <div class="ps-user-name">Arjun Verma</div>
+      <div class="ps-user-sub">Roll No: student123</div>
+      <span class="ps-user-badge">B.Sc. Computer Science</span>
+    </div>
+    <nav class="ps-nav">
+      <a href="dashboard.html" class="ps-link"><span class="ps-icon">📊</span> Dashboard</a>
+      <a href="results.html"   class="ps-link"><span class="ps-icon">📝</span> Results</a>
+      <a href="timetable.html" class="ps-link active"><span class="ps-icon">📅</span> Timetable</a>
+      <a href="queries.html"   class="ps-link"><span class="ps-icon">💬</span> My Queries</a>
+    </nav>
+    <div class="ps-logout">
+      <button class="ps-logout-btn" onclick="portalLogout()"><span>🚪</span> Logout</button>
+    </div>
+  </aside>
+
+  <!-- ═══════ MAIN ═══════ -->
+  <main class="p-main">
+
+    <div class="p-topbar">
+      <div class="p-topbar-left">
+        <h1>Timetable</h1>
+        <p>B.Sc. CS — Semester V · Academic Year 2024–25</p>
+      </div>
+      <div class="p-topbar-right">
+        <span class="topbar-badge" id="today-topbar">Today: —</span>
+      </div>
+    </div>
+
+    <div class="p-content">
+
+      <!-- TODAY'S CLASSES (populated by JS) -->
+      <div class="today-class">
+        <h3>📅 Today's Classes — <span id="today-day-label">—</span></h3>
+        <div id="today-periods"></div>
+      </div>
+
+      <!-- LEGEND -->
+      <div class="card" style="margin-bottom: 1.25rem;">
+        <div class="card-body" style="padding: 1rem 1.5rem; display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+          <span style="font-size: 0.72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em;">Legend:</span>
+          <span class="tt-cell tt-ds">Data Structures</span>
+          <span class="tt-cell tt-dbms">DBMS</span>
+          <span class="tt-cell tt-web">Web Tech</span>
+          <span class="tt-cell tt-math">Disc. Math</span>
+          <span class="tt-cell tt-os">OS</span>
+          <span class="tt-cell tt-lab">Practical / Lab</span>
+        </div>
+      </div>
+
+      <!-- WEEKLY TIMETABLE -->
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <div class="card-header">
+          <span class="card-title">📅 Weekly Schedule — B.Sc. CS Semester V</span>
+          <span class="badge badge-navy">Room CS-201</span>
+        </div>
+        <div class="tt-wrap">
+          <table class="tt-table">
+            <thead>
+              <tr>
+                <th style="white-space:nowrap;">Time Slot</th>
+                <th id="th-mon">Monday</th>
+                <th id="th-tue">Tuesday</th>
+                <th id="th-wed">Wednesday</th>
+                <th id="th-thu">Thursday</th>
+                <th id="th-fri">Friday</th>
+                <th id="th-sat">Saturday</th>
+              </tr>
+            </thead>
+            <tbody id="tt-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- FACULTY TABLE -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">👨‍🏫 Subject Faculty</span>
+          <span class="badge badge-navy">B.Sc. CS Sem V</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Subject</th><th>Faculty</th><th>Department</th><th>Room</th></tr>
+            </thead>
+            <tbody id="faculty-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script src="../portal.js"></script>
+<script>
+  requireStudentLogin();
+
+  const tt = STUDENT_DATA.timetable;
+  const sm = tt.subjectMap;
+  const dayKeys = ['mon','tue','wed','thu','fri','sat'];
+  const dayNames = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+  // Find today
+  const todayJsDay = new Date().getDay(); // 0=Sun
+  const todayIdx = todayJsDay === 0 ? -1 : todayJsDay - 1; // 0=Mon
+  const todayKey = todayIdx >= 0 && todayIdx < 6 ? dayKeys[todayIdx] : null;
+
+  // Topbar
+  document.getElementById('today-topbar').textContent = todayKey ? 'Today: ' + dayNames[todayIdx] : 'Today: Weekend';
+  document.getElementById('today-day-label').textContent = todayKey ? dayNames[todayIdx] : 'Weekend — No Classes';
+
+  // Highlight today's column header
+  if (todayKey) {
+    const th = document.getElementById('th-' + todayKey);
+    if (th) th.classList.add('tt-today-th');
+  }
+
+  // Build timetable body
+  const tbody = document.getElementById('tt-body');
+  tt.periods.forEach(period => {
+    const row = document.createElement('tr');
+    if (period.isLunch) {
+      row.className = 'tt-lunch';
+      row.innerHTML = `
+        <td style="font-weight:700;font-size:0.78rem;color:var(--warn);white-space:nowrap;">${period.time}</td>
+        <td colspan="6">🍽️ &nbsp; Lunch Break</td>
+      `;
+    } else {
+      let html = `<td style="font-weight:700;font-size:0.78rem;color:var(--muted);white-space:nowrap;">${period.time}</td>`;
+      dayKeys.forEach((key, i) => {
+        const subCode = period[key];
+        const isTodayCol = key === todayKey;
+        const subInfo = subCode && sm[subCode];
+        const cellContent = subInfo
+          ? `<span class="tt-cell tt-${sm[subCode].color}">${subCode === 'Lab' ? 'Practical' : sm[subCode].full.split(' ')[0] + (sm[subCode].full.split(' ')[1] ? ' ' + sm[subCode].full.split(' ')[1] : '')}</span>`
+          : `<span style="color:var(--border);">—</span>`;
+        html += `<td ${isTodayCol ? 'class="tt-today-col"' : ''}>${cellContent}</td>`;
+      });
+      row.innerHTML = html;
+    }
+    tbody.appendChild(row);
+  });
+
+  // Today's classes sidebar
+  const todayEl = document.getElementById('today-periods');
+  if (!todayKey) {
+    todayEl.innerHTML = `<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin:0;">It's the weekend — enjoy your break! 🎉</p>`;
+  } else {
+    const todayPeriods = tt.periods.filter(p => !p.isLunch && p[todayKey]);
+    if (todayPeriods.length === 0) {
+      todayEl.innerHTML = `<p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin:0;">No classes scheduled today.</p>`;
+    } else {
+      const now = new Date();
+      const nowMins = now.getHours() * 60 + now.getMinutes();
+      todayPeriods.forEach(p => {
+        const code = p[todayKey];
+        const info = sm[code];
+        const startH = parseInt(p.time.split(':')[0]);
+        const endH   = parseInt(p.time.split('–')[1].trim().split(':')[0]);
+        const isNow  = nowMins >= startH * 60 && nowMins < endH * 60;
+        const div = document.createElement('div');
+        div.className = 'today-period';
+        div.innerHTML = `
+          <span class="today-time">${p.time}</span>
+          <div>
+            <div class="today-sub">${info ? info.full : code}${isNow ? ' <span class="now-indicator">● NOW</span>' : ''}</div>
+            <div class="today-info">${info ? info.faculty + ' · ' + info.room : ''}</div>
+          </div>
+        `;
+        todayEl.appendChild(div);
+      });
+    }
+  }
+
+  // Faculty table
+  const ftbody = document.getElementById('faculty-tbody');
+  Object.entries(sm).forEach(([code, info]) => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td><span class="tt-cell tt-${info.color}">${info.full}</span></td>
+      <td style="font-weight:600;">${info.faculty}</td>
+      <td style="color:var(--muted);">Computer Science</td>
+      <td><span class="badge badge-navy">${info.room}</span></td>
+    `;
+    ftbody.appendChild(row);
+  });
+
+  document.getElementById('sidebarToggle').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('open');
+  });
+</script>
+</body>
+</html>

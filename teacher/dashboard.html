@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teacher Dashboard — DAV College Staff Portal</title>
+  <link rel="stylesheet" href="../portal.css" />
+  <style>
+    /* Teacher-specific overrides */
+    .ps-brand-sub { color: var(--gold-light); }
+
+    /* Student attendance bar */
+    .att-bar-wrap {
+      flex: 1;
+      max-width: 100px;
+      height: 6px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .att-bar { height: 100%; border-radius: 4px; }
+
+    /* Student avatar in table */
+    .stu-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center; justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+
+    /* Subject tag */
+    .subject-tag {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      background: var(--off);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      margin-bottom: 0.5rem;
+    }
+    .subject-tag:last-child { margin-bottom: 0; }
+
+    /* Pending query preview */
+    .qpreview {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .qpreview:last-child { border-bottom: none; }
+    .qpreview-avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.72rem; font-weight: 800; color: var(--white);
+      flex-shrink: 0;
+    }
+    .qpreview-name { font-weight: 700; font-size: 0.82rem; color: var(--navy); }
+    .qpreview-subject { font-size: 0.7rem; color: var(--gold); font-weight: 700; }
+    .qpreview-text { font-size: 0.78rem; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+  </style>
+</head>
+<body>
+
+<button class="sidebar-toggle" id="sidebarToggle">
+  <span></span><span></span><span></span>
+</button>
+
+<div class="portal-wrap">
+
+  <!-- ═══════ SIDEBAR ═══════ -->
+  <aside class="p-sidebar" id="sidebar">
+    <div class="ps-brand">
+      <div class="ps-brand-logo">DAV</div>
+      <div>
+        <div class="ps-brand-name">D.A.V. College</div>
+        <div class="ps-brand-sub">Staff Portal · Est. 1926</div>
+      </div>
+    </div>
+
+    <div class="ps-user">
+      <div class="ps-avatar">PK</div>
+      <div class="ps-user-name">Dr. Priya Sharma</div>
+      <div class="ps-user-sub">Emp ID: teacher123</div>
+      <span class="ps-user-badge">Computer Science</span>
+    </div>
+
+    <nav class="ps-nav">
+      <a href="dashboard.html" class="ps-link active">
+        <span class="ps-icon">🏠</span> Dashboard
+      </a>
+      <a href="notices.html" class="ps-link">
+        <span class="ps-icon">📢</span> Notices
+      </a>
+      <a href="queries.html" class="ps-link">
+        <span class="ps-icon">💬</span> Student Queries
+        <span id="sidebar-pending-badge" style="margin-left:auto; background:var(--danger-bg);
+          color:var(--danger); font-size:0.65rem; font-weight:800; padding:2px 7px;
+          border-radius:100px; display:none;">0</span>
+      </a>
+    </nav>
+
+    <div class="ps-logout">
+      <button class="ps-logout-btn" onclick="teacherLogout()"><span>🚪</span> Logout</button>
+    </div>
+  </aside>
+
+  <!-- ═══════ MAIN ═══════ -->
+  <main class="p-main">
+
+    <div class="p-topbar">
+      <div class="p-topbar-left">
+        <h1>Teacher Dashboard</h1>
+        <p>B.Sc. Computer Science — Academic Year 2024–25</p>
+      </div>
+      <div class="p-topbar-right">
+        <span class="topbar-badge">🏅 NAAC Grade A</span>
+      </div>
+    </div>
+
+    <div class="p-content">
+
+      <!-- WELCOME BAR -->
+      <div style="background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+                  border-radius: var(--radius-lg); padding: 1.5rem 2rem;
+                  display: flex; align-items: center; justify-content: space-between;
+                  margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; position: relative; overflow: hidden;">
+        <div style="position:absolute;right:-30px;top:-30px;width:160px;height:160px;
+                    background:radial-gradient(circle,rgba(200,145,42,0.2) 0%,transparent 70%);border-radius:50%;"></div>
+        <div style="position:relative;">
+          <h2 id="greeting-msg" style="color:var(--white);font-size:1.2rem;margin-bottom:4px;">Good morning 👋</h2>
+          <p style="color:rgba(255,255,255,0.6);font-size:0.82rem;margin:0;">Computer Science Dept. · B.Sc. CS Semester V · Academic Year 2024–25</p>
+        </div>
+        <div style="background:rgba(200,145,42,0.2);border:1px solid rgba(200,145,42,0.4);
+                    color:var(--gold-light);font-size:0.78rem;font-weight:700;
+                    padding:6px 16px;border-radius:100px;position:relative;">
+          CS Faculty
+        </div>
+      </div>
+
+      <!-- STAT CARDS -->
+      <div class="stats-row" style="margin-bottom:1.5rem;">
+        <div class="stat-card">
+          <div class="stat-icon gold">🎓</div>
+          <div class="stat-value">5</div>
+          <div class="stat-label">Total Students</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" id="query-stat-icon" style="background:var(--gold-pale);">💬</div>
+          <div class="stat-value" id="stat-pending">—</div>
+          <div class="stat-label">Pending Queries</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">📢</div>
+          <div class="stat-value" id="stat-notices">5</div>
+          <div class="stat-label">Notices Posted</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon navy">📚</div>
+          <div class="stat-value">2</div>
+          <div class="stat-label">Subjects Teaching</div>
+        </div>
+      </div>
+
+      <!-- STUDENT LIST + RIGHT COLUMN -->
+      <div class="grid-2" style="align-items:start; margin-bottom:1.5rem;">
+
+        <!-- Student List -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🎓 My Students — B.Sc. CS Sem V</span>
+            <span class="badge badge-navy">5 enrolled</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Attendance</th>
+                  <th>SGPA</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <span class="stu-avatar" style="background:#0d2147;">AV</span>
+                      <div>
+                        <div style="font-weight:700;font-size:0.82rem;">Arjun Verma</div>
+                        <div style="font-size:0.68rem;color:var(--muted);">student123</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <div class="att-bar-wrap"><div class="att-bar" style="width:75%;background:var(--success);"></div></div>
+                      <span style="font-weight:700;font-size:0.8rem;">75%</span>
+                    </div>
+                  </td>
+                  <td style="font-weight:700;">7.8</td>
+                  <td><span class="badge badge-success">Good</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <span class="stu-avatar" style="background:#1a8a50;">SK</span>
+                      <div>
+                        <div style="font-weight:700;font-size:0.82rem;">Simran Kaur</div>
+                        <div style="font-size:0.68rem;color:var(--muted);">BCA2302</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <div class="att-bar-wrap"><div class="att-bar" style="width:90%;background:var(--success);"></div></div>
+                      <span style="font-weight:700;font-size:0.8rem;">90%</span>
+                    </div>
+                  </td>
+                  <td style="font-weight:700;">8.2</td>
+                  <td><span class="badge badge-success">Excellent</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <span class="stu-avatar" style="background:#c8912a;">RG</span>
+                      <div>
+                        <div style="font-weight:700;font-size:0.82rem;">Ravi Gupta</div>
+                        <div style="font-size:0.68rem;color:var(--muted);">BCA2303</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <div class="att-bar-wrap"><div class="att-bar" style="width:68%;background:var(--warn-bg);border-right:2px solid var(--warn);"></div></div>
+                      <span style="font-weight:700;font-size:0.8rem;color:var(--warn);">68%</span>
+                    </div>
+                  </td>
+                  <td style="font-weight:700;">7.1</td>
+                  <td><span class="badge badge-warn">Low Att.</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <span class="stu-avatar" style="background:#7c3aed;">NM</span>
+                      <div>
+                        <div style="font-weight:700;font-size:0.82rem;">Navneet Mann</div>
+                        <div style="font-size:0.68rem;color:var(--muted);">BCA2304</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <div class="att-bar-wrap"><div class="att-bar" style="width:55%;background:var(--danger);"></div></div>
+                      <span style="font-weight:700;font-size:0.8rem;color:var(--danger);">55%</span>
+                    </div>
+                  </td>
+                  <td style="font-weight:700;">6.3</td>
+                  <td><span class="badge badge-danger">At Risk</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <span class="stu-avatar" style="background:#0369a1;">PB</span>
+                      <div>
+                        <div style="font-weight:700;font-size:0.82rem;">Pooja Bakshi</div>
+                        <div style="font-size:0.68rem;color:var(--muted);">BCA2305</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <div class="att-bar-wrap"><div class="att-bar" style="width:93%;background:var(--success);"></div></div>
+                      <span style="font-weight:700;font-size:0.8rem;">93%</span>
+                    </div>
+                  </td>
+                  <td style="font-weight:700;">9.1</td>
+                  <td><span class="badge badge-success">Excellent</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right column: Pending Queries + Quick Actions -->
+        <div style="display:flex;flex-direction:column;gap:1.25rem;">
+
+          <!-- Pending Queries Preview -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">💬 Pending Queries</span>
+              <a href="queries.html" class="btn btn-outline" style="padding:4px 12px;font-size:0.75rem;">Reply All →</a>
+            </div>
+            <div class="card-body" style="padding:0 1.5rem 1rem;">
+              <div id="pending-preview">
+                <p style="color:var(--muted);font-size:0.82rem;">Loading…</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">⚡ Quick Actions</span>
+            </div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:0.75rem;">
+              <a href="notices.html" class="quick-btn">
+                <span class="quick-btn-icon">📢</span>
+                <span>Post New Notice</span>
+              </a>
+              <a href="queries.html" class="quick-btn">
+                <span class="quick-btn-icon">💬</span>
+                <span>Reply to Student Queries</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Subjects Teaching -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">📚 Subjects Teaching</span>
+            </div>
+            <div class="card-body">
+              <div class="subject-tag">
+                <span style="font-weight:700;font-size:0.85rem;">Data Structures</span>
+                <span class="badge badge-navy">CS501</span>
+              </div>
+              <div class="subject-tag">
+                <span style="font-weight:700;font-size:0.85rem;">Database Management</span>
+                <span class="badge badge-navy">CS502</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script src="../portal.js"></script>
+<script>
+  requireTeacherLogin();
+
+  // Greeting
+  const hr = new Date().getHours();
+  document.getElementById('greeting-msg').textContent =
+    (hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening') + ', Dr. Priya Sharma 👋';
+
+  // Pending queries count + preview
+  const queries = getAllQueries();
+  const pending = queries.filter(q => q.status === 'pending');
+  document.getElementById('stat-pending').textContent = pending.length;
+
+  // Sidebar badge
+  const sb = document.getElementById('sidebar-pending-badge');
+  if (pending.length > 0) {
+    sb.textContent = pending.length;
+    sb.style.display = 'inline-block';
+  }
+
+  // Pending preview
+  const previewEl = document.getElementById('pending-preview');
+  previewEl.innerHTML = '';
+  if (pending.length === 0) {
+    previewEl.innerHTML = `<p style="color:var(--success);font-size:0.82rem;font-weight:600;padding:0.5rem 0;">✅ All queries answered!</p>`;
+  } else {
+    pending.slice(0, 3).forEach(q => {
+      const div = document.createElement('div');
+      div.className = 'qpreview';
+      div.innerHTML = `
+        <div class="qpreview-avatar" style="background:var(--navy);">AV</div>
+        <div style="min-width:0;">
+          <div class="qpreview-name">Arjun Verma <span style="font-weight:400;color:var(--muted);font-size:0.68rem;">· student123</span></div>
+          <div class="qpreview-subject">${escapeHtml(q.subject)}</div>
+          <div class="qpreview-text">${escapeHtml(q.text)}</div>
+        </div>
+        <a href="queries.html" style="flex-shrink:0;font-size:0.72rem;font-weight:700;color:var(--gold);">Reply →</a>
+      `;
+      previewEl.appendChild(div);
+    });
+    if (pending.length > 3) {
+      previewEl.innerHTML += `<p style="font-size:0.75rem;color:var(--muted);padding-top:0.5rem;margin:0;">+${pending.length - 3} more — <a href="queries.html" style="color:var(--gold);font-weight:700;">View all</a></p>`;
+    }
+  }
+
+  document.getElementById('sidebarToggle').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('open');
+  });
+</script>
+</body>
+</html>
